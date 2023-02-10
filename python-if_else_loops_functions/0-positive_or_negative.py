@@ -8,4 +8,3 @@ elif number > 0:
 else:
     sign = "is zero"
 print("{:d}".format(number), sign)
-
