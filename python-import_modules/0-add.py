@@ -1,10 +1,8 @@
 
 #!/usr/bin/python3
-# Import a simple function from a simple file
+# from add_0 import add
 
 def add(a, b):
-    return a + b
-
-from my_functions import add_numbers
-result = add_numbers(1, 2)
-print(result) #output: 3
+    a = 1
+    b = 2
+print("{} + {} = {}".format(a, b, add(a, b)))
