@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Divide a matrix"""
 
+
 def matrix_divided(matrix, div):
     """"Doc"""
     if not isinstance(matrix, (list,)):
