@@ -1,1 +1,1 @@
-wend ya panga
+doing more than hard
