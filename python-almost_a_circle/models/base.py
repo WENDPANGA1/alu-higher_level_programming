@@ -1,14 +1,16 @@
 #!/usr/bin/python3
-"""base class"""
+"""Creating an empty class called Base"""
+
+
 import json
 
 
 class Base:
-    """class named base"""
+    """Creating class Base"""
     __nb_objects = 0
 
     def __init__(self, id=None):
-        """initialising the init function"""
+        """Function with an id"""
         if id is not None:
             self.id = id
         else:
@@ -17,7 +19,9 @@ class Base:
 
     @staticmethod
     def to_json_string(list_dictionaries):
-        """json to string function"""
+        """Defining a function that
+        returns the JSON string representation
+        of list_dictionaries"""
         if list_dictionaries is None:
             return "[]"
 
@@ -28,31 +32,34 @@ class Base:
 
     @classmethod
     def save_to_file(cls, list_objs):
-        """save file function"""
-        fname = cls.__name__ + ".json"
-        x = []
+        """Defining a function that writes the
+        JSON string representation of list_objs to a file"""
+        file = cls.__name__ + ".json"
+        new_list = []
         if list_objs:
             for i in list_objs:
-                x.append(cls.to_dictionary(i))
+                new_list.append(cls.to_dictionary(i))
 
-        with open(fname, mode="w") as saveme:
-            saveme.write(cls.to_json_string(x))
+        with open(file, mode="w") as myFile:
+            myFile.write(cls.to_json_string(new_list))
 
     @staticmethod
     def from_json_string(json_string):
-        """from json to string"""
+        """Defining a function that
+        returns the list of the JSON string representation"""
         if json_string is None:
             return []
 
         if len(json_string) == 0:
             return []
 
-        j_list = json.loads(json_string)
-        return j_list
+        list_dicts = json.loads(json_string)
+        return list_dicts
 
     @classmethod
     def create(cls, **dictionary):
-        """create function"""
+        """Defining a function  that returns
+        an instance with all attributes already set"""
         if cls.__name__ == "Rectangle":
             dummy = cls(3, 2)
         if cls.__name__ == "Square":
@@ -62,15 +69,16 @@ class Base:
 
     @classmethod
     def load_from_file(cls):
-        """load from file function"""
+        """Defining a function that
+        returns a list of instances"""
         try:
-            with open(cls.__name__ + ".json", "r") as doc:
-                document = doc.read()
+            with open(cls.__name__ + ".json", "r") as file:
+                content = file.read()
         except FileNotFoundError:
             return []
 
-        w = cls.from_json_string(document)
-        x = []
-        for z in w:
-            x.append(cls.create(**z))
-        return x
+        ex_content = cls.from_json_string(content)
+        context_list = []
+        for instance_dict in ex_content:
+            context_list.append(cls.create(**instance_dict))
+        return context_list
