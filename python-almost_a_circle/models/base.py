@@ -1,84 +1,141 @@
 #!/usr/bin/python3
-"""Creating an empty class called Base"""
+"""Creating class rectangle"""
 
 
-import json
+from models.base import Base
 
 
-class Base:
-    """Creating class Base"""
-    __nb_objects = 0
+class Rectangle(Base):
+    """Create class Rectangle"""
 
-    def __init__(self, id=None):
-        """Function with an id"""
-        if id is not None:
-            self.id = id
-        else:
-            Base.__nb_objects += 1
-            self.id = Base.__nb_objects
+    def __init__(self, width, height, x=0, y=0, id=None):
+        """Function that initializes
+        the width,heigh,x,y and id and calls the super class"""
+        super().__init__(id)
+        self.width = width
+        self.height = height
+        self.x = x
+        self.y = y
 
-    @staticmethod
-    def to_json_string(list_dictionaries):
-        """Defining a function that
-        returns the JSON string representation
-        of list_dictionaries"""
-        if list_dictionaries is None:
-            return "[]"
+    @property
+    def width(self):
+        """Defining a function containing the width of the rectangle"""
 
-        if len(list_dictionaries) == 0:
-            return "[]"
+        return self.__width
 
-        return json.dumps(list_dictionaries)
+    @width.setter
+    def width(self, value):
+        """Function that establishes the width with some exceptions
+        - if the value is not an integer, a TypeError exception is raised
+        - if the value is <= 0, a ValueError excep is raised"""
 
-    @classmethod
-    def save_to_file(cls, list_objs):
-        """Defining a function that writes the
-        JSON string representation of list_objs to a file"""
-        file = cls.__name__ + ".json"
-        new_list = []
-        if list_objs:
-            for i in list_objs:
-                new_list.append(cls.to_dictionary(i))
+        if type(value) != int:
+            raise TypeError("width must be an integer")
 
-        with open(file, mode="w") as myFile:
-            myFile.write(cls.to_json_string(new_list))
+        if value <= 0:
+            raise ValueError("width must be > 0")
+        self.__width = value
 
-    @staticmethod
-    def from_json_string(json_string):
-        """Defining a function that
-        returns the list of the JSON string representation"""
-        if json_string is None:
-            return []
+    @property
+    def height(self):
+        """Defining a function containing the height of the rectangle"""
 
-        if len(json_string) == 0:
-            return []
+        return self.__height
 
-        list_dicts = json.loads(json_string)
-        return list_dicts
+    @height.setter
+    def height(self, value):
+        """"Function that establishes the height with some exceptions
+        - if the value is not an integer, a TypeError exception is raised
+        - if the value is <= 0, a ValueError excep is raised"""
+        if type(value) != int:
+            raise TypeError("height must be an integer")
 
-    @classmethod
-    def create(cls, **dictionary):
-        """Defining a function  that returns
-        an instance with all attributes already set"""
-        if cls.__name__ == "Rectangle":
-            dummy = cls(3, 2)
-        if cls.__name__ == "Square":
-            dummy = cls(3)
-        dummy.update(**dictionary)
-        return dummy
+        if value <= 0:
+            raise ValueError("height must be > 0")
 
-    @classmethod
-    def load_from_file(cls):
-        """Defining a function that
-        returns a list of instances"""
-        try:
-            with open(cls.__name__ + ".json", "r") as file:
-                content = file.read()
-        except FileNotFoundError:
-            return []
+        self.__height = value
 
-        ex_content = cls.from_json_string(content)
-        context_list = []
-        for instance_dict in ex_content:
-            context_list.append(cls.create(**instance_dict))
-        return context_list
+    @property
+    def x(self):
+        """Defining function x"""
+        return self.__x
+
+    @x.setter
+    def x(self, value):
+        """Function that establishes the value of x and if
+        - x < 0, then a ValueError exception is raised"""
+        if type(value) != int:
+            raise TypeError("x must be an integer")
+        if value < 0:
+            raise ValueError("x must be >= 0")
+        self.__x = value
+
+    @property
+    def y(self):
+        """Defining function y"""
+        return self.__y
+
+    @y.setter
+    def y(self, value):
+        """Function that establishes the value of y and if
+        - y < 0, then a ValueError exception is raised"""
+
+        if type(value) != int:
+            raise TypeError("y must be an integer")
+
+        if value < 0:
+            raise ValueError("y must be >= 0")
+
+        self.__y = value
+
+    def area(self):
+        """Defining a function area that
+        returns the area of Rectangle"""
+
+        return self.height * self.width
+
+    def display(self):
+        """Defining a display a function that prints in
+        stdout the Rectangle instance with character #"""
+
+        for i in range(self.y):
+            print()
+        for i in range(self.height):
+            print(' ' * self.x + '#' * self.width)
+
+    def __str__(self):
+        """Defining function str that returns [Rectangle]"""
+
+        return "[Rectangle] ({}) {}/{} - {}/{}" \
+            .format(self.id, self.x, self.y, self.width, self.height)
+
+    def update(self, *args, **kwargs):
+            """Defining function update that assigns arguments"""
+            if len(args) != 0:
+                try:
+                    self.id = args[0]
+                    self.width = args[1]
+                    self.height = args[2]
+                    self.x = args[3]
+                    self.y = args[4]
+                except IndexError:
+                    pass
+            elif len(kwargs) != 0:
+                self.id = kwargs["id"] if "id" in kwargs else self.id
+                self.width = kwargs["width"] if "width" in kwargs \
+                    else self.width
+                self.height = kwargs["height"] if "height" in kwargs \
+                    else self.height
+                self.x = kwargs["x"] if "x" in kwargs else self.x
+                self.y = kwargs["y"] if "y" in kwargs else self.y
+
+    def to_dictionary(self):
+        """Defining the function to_dictionary that returns
+        the dictionary representation of a Rectangle"""
+        return {
+            'id': self.id,
+            'width': self.width,
+            'height': self.height,
+            'x': self.x,
+            'y': self.y
+        }
