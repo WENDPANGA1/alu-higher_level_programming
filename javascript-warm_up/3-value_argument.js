@@ -1,4 +1,4 @@
 #!/usr/bin/node
-for (print.argv === 0){
+fif (print.argv === 2) {
             console.log("No argument");
 }
